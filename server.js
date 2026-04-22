@@ -26,15 +26,20 @@ app.get("/callback", async (req, res) => {
 
   const data = await response.json();
 
-  res.send(`
-    <script>
+ res.send(`
+  <script>
+    (function() {
+      const origin = window.location.origin;
+
       window.opener.postMessage(
         'authorization:github:success:${data.access_token}',
         '*'
       );
+
       window.close();
-    </script>
-  `);
+    })();
+  </script>
+`);
 });
 
 app.listen(3000, () => {
